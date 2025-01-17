@@ -46,6 +46,8 @@ export const todolistsReducer = (state: DomainTodolist[] = initialState, action:
       return state.map((tl) =>
         tl.id === action.payload.id ? { ...tl, entityStatus: action.payload.entityStatus } : tl,
       )
+    case "CLEAR-DATA":
+      return []
 
     default:
       return state
@@ -77,6 +79,10 @@ export const setTodolistsAC = (todolists: Todolist[]) => {
   return { type: "SET-TODOLISTS", todolists } as const
 }
 
+export const clearDataAC = () => {
+  return { type: "CLEAR-DATA" } as const
+}
+
 // Actions types
 export type RemoveTodolistActionType = ReturnType<typeof removeTodolistAC>
 export type AddTodolistActionType = ReturnType<typeof addTodolistAC>
@@ -84,6 +90,7 @@ export type ChangeTodolistTitleActionType = ReturnType<typeof changeTodolistTitl
 export type ChangeTodolistFilterActionType = ReturnType<typeof changeTodolistFilterAC>
 export type ChangeTodolistEntityStatusType = ReturnType<typeof changeTodolistEntityStatusAC>
 export type SetTodolistsActionType = ReturnType<typeof setTodolistsAC>
+export type ClearDataActionType = ReturnType<typeof clearDataAC>
 
 // Thunks
 
@@ -160,3 +167,4 @@ type ActionsType =
   | ChangeTodolistFilterActionType
   | ChangeTodolistEntityStatusType
   | SetTodolistsActionType
+  | ClearDataActionType

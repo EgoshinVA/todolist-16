@@ -4,12 +4,12 @@ import { ErrorSnackbar, Header } from "common/components"
 import { useAppDispatch, useAppSelector } from "common/hooks"
 import { getTheme } from "common/theme"
 import { selectThemeMode } from "./appSelectors"
-import { Routing } from "common/routing/Routing"
 import { initializeAppTC } from "../features/auth/model/auth-reducer"
 import React, { useEffect } from "react"
 import { selectIsInitialized } from "../features/auth/model/authSelectors"
-import s from './App.module.css'
+import s from "./App.module.css"
 import { CircularProgress } from "@mui/material"
+import { Outlet } from "react-router"
 
 export const App = () => {
   const themeMode = useAppSelector(selectThemeMode)
@@ -32,7 +32,7 @@ export const App = () => {
     <ThemeProvider theme={getTheme(themeMode)}>
       <CssBaseline />
       <Header />
-      <Routing />
+      <Outlet />
       <ErrorSnackbar />
     </ThemeProvider>
   )

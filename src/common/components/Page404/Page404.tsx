@@ -1,5 +1,5 @@
 import s from './Page404.module.css'
-import { Path } from "common/routing/Routing"
+import { Path } from "common/routing/router"
 import { Link } from "react-router"
 
 export const Page404 = () => {

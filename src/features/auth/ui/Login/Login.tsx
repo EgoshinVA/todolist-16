@@ -15,7 +15,7 @@ import { loginTC } from "../../model/auth-reducer"
 import { useEffect } from "react"
 import { useNavigate } from "react-router"
 import { selectIsLoggedIn } from "../../model/authSelectors"
-import { Path } from "common/routing/Routing"
+import { Path } from "common/routing/router"
 
 type Inputs = {
   email: string

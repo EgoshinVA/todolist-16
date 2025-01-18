@@ -12,6 +12,8 @@ import { getTheme } from "common/theme"
 import { MenuButton } from "common/components"
 import { selectIsLoggedIn } from "../../../features/auth/model/authSelectors"
 import { logoutTC } from "../../../features/auth/model/auth-reducer"
+import { Link } from "react-router"
+import { Path } from "common/routing/router"
 
 export const Header = () => {
   const dispatch = useAppDispatch()
@@ -34,7 +36,9 @@ export const Header = () => {
         </IconButton>
         <div>
           {isLoggedIn && <MenuButton onClick={() => dispatch(logoutTC())}>Logout</MenuButton>}
-          <MenuButton background={theme.palette.primary.dark}>Faq</MenuButton>
+          <MenuButton background={theme.palette.primary.dark}>
+            <Link to={Path.Faq}>Faq</Link>
+          </MenuButton>
           <Switch color={"default"} onChange={changeModeHandler} />
         </div>
       </Toolbar>

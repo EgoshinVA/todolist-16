@@ -1,7 +1,7 @@
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+
 export type ThemeMode = "dark" | "light"
 export type RequestStatus = "idle" | "loading" | "succeeded" | "failed"
-
-type InitialState = typeof initialState
 
 const initialState = {
   themeMode: "light" as ThemeMode,
@@ -9,47 +9,22 @@ const initialState = {
   error: null as string | null,
 }
 
-export const appReducer = (state: InitialState = initialState, action: ActionsType): InitialState => {
-  switch (action.type) {
-    case "CHANGE_THEME":
-      return { ...state, themeMode: action.payload.themeMode }
+const appSLice = createSlice({
+  name: "app",
+  initialState,
+  reducers: {
+    changeTheme(state, action: PayloadAction<ThemeMode>) {
+      state.themeMode = action.payload
+    },
+    setAppStatus(state, action: PayloadAction<RequestStatus>) {
+      state.status = action.payload
+    },
+    setAppError(state, action: PayloadAction<string | null>) {
+      state.error = action.payload
+    },
+  },
+})
 
-    case "SET_STATUS":
-      return { ...state, status: action.payload.status }
+export const { changeTheme, setAppError, setAppStatus } = appSLice.actions
 
-    case "SET_ERROR":
-      return { ...state, error: action.payload.error }
-
-    default:
-      return state
-  }
-}
-
-// Action creators
-export const changeThemeAC = (themeMode: ThemeMode) => {
-  return {
-    type: "CHANGE_THEME",
-    payload: { themeMode },
-  } as const
-}
-
-export const setAppStatusAC = (status: RequestStatus) => {
-  return {
-    type: "SET_STATUS",
-    payload: { status },
-  } as const
-}
-
-export const setAppErrorAC = (error: string | null) => {
-  return {
-    type: "SET_ERROR",
-    payload: { error },
-  } as const
-}
-
-// Actions types
-type ChangeThemeActionType = ReturnType<typeof changeThemeAC>
-type SetAppStatusActionType = ReturnType<typeof setAppStatusAC>
-type SetAppErrorActionType = ReturnType<typeof setAppErrorAC>
-
-type ActionsType = ChangeThemeActionType | SetAppStatusActionType | SetAppErrorActionType
+export default appSLice.reducer

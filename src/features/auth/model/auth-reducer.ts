@@ -8,7 +8,7 @@ import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
 import { clearData } from "../../todolists/model/todolists-reducer"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
-const initialState = {
+export const initialState = {
   isLoggedIn: false,
   isInitialized: false,
 }

@@ -6,8 +6,9 @@ import { setAppStatus } from "../../../app/app-reducer"
 import { RootState } from "../../../app/store"
 import { tasksApi } from "../api/tasksApi"
 import { DomainTask, UpdateTaskDomainModel, UpdateTaskModel } from "../api/tasksApi.types"
-import { clearData, removeTodolist } from "./todolists-reducer"
+import { addTodolist, clearData, removeTodolist } from "./todolists-reducer"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { Todolist } from "../api/todolistsApi.types"
 
 export type TasksStateType = {
   [key: string]: DomainTask[]
@@ -50,8 +51,11 @@ const tasksSlice = createSlice({
     builder.addCase(removeTodolist, (state, action: PayloadAction<string>) => {
       delete state[action.payload]
     })
-    builder.addCase(clearData, (state) => {
+    builder.addCase(clearData, () => {
       return {}
+    })
+    builder.addCase(addTodolist, (state, action: PayloadAction<Todolist>) => {
+      return {...state, [action.payload.id]: []}
     })
   },
 })

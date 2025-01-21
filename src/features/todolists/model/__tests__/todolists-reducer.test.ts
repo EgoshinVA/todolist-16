@@ -1,11 +1,10 @@
 import { Todolist } from "../../api/todolistsApi.types"
-import {
+import todolistsReducer, {
   addTodolist,
   changeTodolistFilter,
   changeTodolistTitle,
   DomainTodolist,
-  removeTodolist,
-  todolistsReducer,
+  removeTodolist
 } from "../todolists-reducer"
 import { v1 } from "uuid"
 
@@ -18,8 +17,8 @@ beforeEach(() => {
   todolistId2 = v1()
 
   startState = [
-    { id: todolistId1, title: "What to learn", filter: "all", addedDate: "", order: 0 },
-    { id: todolistId2, title: "What to buy", filter: "all", addedDate: "", order: 0 },
+    { id: todolistId1, title: "What to learn", filter: "all", addedDate: "", order: 0, entityStatus: 'idle' },
+    { id: todolistId2, title: "What to buy", filter: "all", addedDate: "", order: 0, entityStatus: 'idle' },
   ]
 })
 

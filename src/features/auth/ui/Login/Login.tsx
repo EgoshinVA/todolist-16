@@ -11,17 +11,13 @@ import { getTheme } from "common/theme"
 import { selectThemeMode } from "../../../../app/appSelectors"
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
 import s from "./Login.module.css"
-import { loginTC } from "../../model/auth-reducer"
 import { useEffect } from "react"
 import { useNavigate } from "react-router"
-import { selectIsLoggedIn } from "../../model/authSelectors"
 import { Path } from "common/routing/router"
-
-type Inputs = {
-  email: string
-  password: string
-  rememberMe: boolean
-}
+import { selectIsAuth, setLoggedIn } from "../../../../app/appSlice"
+import { useLoginMutation } from "../../api/authApi"
+import { ResultCode } from "common/enums"
+import { LoginArgs } from "../../api/authApi.types"
 
 export const Login = () => {
   const themeMode = useAppSelector(selectThemeMode)
@@ -29,7 +25,7 @@ export const Login = () => {
   const dispatch = useAppDispatch()
 
   const navigate = useNavigate()
-  const isLoggedIn = useAppSelector(selectIsLoggedIn)
+  const isLoggedIn = useAppSelector(selectIsAuth)
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -43,7 +39,7 @@ export const Login = () => {
     reset,
     control,
     formState: { errors },
-  } = useForm<Inputs>({
+  } = useForm<LoginArgs>({
     defaultValues: {
       email: "",
       password: "",
@@ -51,9 +47,19 @@ export const Login = () => {
     },
   })
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    dispatch(loginTC(data))
-    reset()
+  const [login] = useLoginMutation()
+
+  const onSubmit: SubmitHandler<LoginArgs> = (data) => {
+    login(data)
+      .then((res) => {
+        if (res.data?.resultCode === ResultCode.Success) {
+          dispatch(setLoggedIn(true))
+          localStorage.setItem("sn-token", res.data.data.token)
+        }
+      })
+      .finally(() => {
+        reset()
+      })
   }
 
   return (
@@ -94,13 +100,18 @@ export const Login = () => {
                 })}
               />
               {errors.email && <span className={s.errorMessage}>{errors.email.message}</span>}
-              <TextField type="password" label="Password" margin="normal" {...register("password", {
-                required: "Password is required",
-                minLength: {
-                  value: 3,
-                  message: "Password must be at least 3 characters long",
-                },
-              })} />
+              <TextField
+                type="password"
+                label="Password"
+                margin="normal"
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 3,
+                    message: "Password must be at least 3 characters long",
+                  },
+                })}
+              />
               {errors.password && <span className={s.errorMessage}>{errors.password.message}</span>}
               <FormControlLabel
                 label={"Remember me"}

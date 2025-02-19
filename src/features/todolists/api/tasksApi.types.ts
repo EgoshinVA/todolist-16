@@ -36,3 +36,6 @@ export type UpdateTaskDomainModel = {
   startDate?: string
   deadline?: string
 }
+export type TasksStateType = {
+  [key: string]: DomainTask[]
+}

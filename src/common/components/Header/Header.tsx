@@ -5,27 +5,40 @@ import LinearProgress from "@mui/material/LinearProgress"
 import Switch from "@mui/material/Switch"
 import Toolbar from "@mui/material/Toolbar"
 import React from "react"
-import { changeTheme } from "../../../app/app-reducer"
+import { changeTheme, selectIsAuth, setLoggedIn } from "../../../app/appSlice"
 import { selectAppStatus, selectThemeMode } from "../../../app/appSelectors"
 import { useAppDispatch, useAppSelector } from "common/hooks"
 import { getTheme } from "common/theme"
 import { MenuButton } from "common/components"
-import { selectIsLoggedIn } from "../../../features/auth/model/authSelectors"
-import { logoutTC } from "../../../features/auth/model/auth-reducer"
 import { Link } from "react-router"
 import { Path } from "common/routing/router"
+import { useLogoutMutation } from "../../../features/auth/api/authApi"
+import { ResultCode } from "common/enums"
+import { baseApi } from "../../../app/baseApi"
 
 export const Header = () => {
   const dispatch = useAppDispatch()
 
   const themeMode = useAppSelector(selectThemeMode)
   const status = useAppSelector(selectAppStatus)
-  const isLoggedIn = useAppSelector(selectIsLoggedIn)
+  const isLoggedIn = useAppSelector(selectIsAuth)
 
   const theme = getTheme(themeMode)
 
   const changeModeHandler = () => {
     dispatch(changeTheme(themeMode === "light" ? "dark" : "light"))
+  }
+
+  const [logout] = useLogoutMutation()
+
+  const logoutHandler = () => {
+    logout().then((res) => {
+      if(res.data?.resultCode === ResultCode.Success){
+        dispatch(setLoggedIn(false))
+        localStorage.removeItem("sn-token")
+        dispatch(baseApi.util.invalidateTags(['Task', 'Todolist']))
+      }
+    })
   }
 
   return (
@@ -35,7 +48,7 @@ export const Header = () => {
           <MenuIcon />
         </IconButton>
         <div>
-          {isLoggedIn && <MenuButton onClick={() => dispatch(logoutTC())}>Logout</MenuButton>}
+          {isLoggedIn && <MenuButton onClick={logoutHandler}>Logout</MenuButton>}
           <MenuButton background={theme.palette.primary.dark}>
             <Link to={Path.Faq}>Faq</Link>
           </MenuButton>

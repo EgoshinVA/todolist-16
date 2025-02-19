@@ -1,12 +1,12 @@
 import React, { useEffect } from "react"
-import { createBrowserRouter, Navigate, Outlet, Route, RouteObject, Routes, useNavigate } from "react-router"
+import { createBrowserRouter, Outlet, RouteObject, useNavigate } from "react-router"
 import { Main } from "../../app/Main"
 import { Login } from "../../features/auth/ui/Login/Login"
 import { Page404 } from "common/components/Page404/Page404"
 import { Faq } from "../../app/Faq"
 import { App } from "../../app/App"
 import { useAppSelector } from "common/hooks"
-import { selectIsLoggedIn } from "../../features/auth/model/authSelectors"
+import { selectIsAuth } from "../../app/appSlice"
 
 export const Path = {
   Main: "/",
@@ -39,7 +39,7 @@ const privateRoutes: RouteObject[] = [
 ]
 
 export const PrivateRoutes = () => {
-  const isLoggedIn = useAppSelector(selectIsLoggedIn)
+  const isLoggedIn = useAppSelector(selectIsAuth)
   const navigate = useNavigate()
 
   useEffect(() => {
